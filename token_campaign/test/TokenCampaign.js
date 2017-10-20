@@ -11,13 +11,12 @@ contract("TokenCampaign", function(accounts) {
 
   var tx_amount = 1000000000000000000; // 1 ether
   var cap = 1;
-  var wei_rate = 1;
-  var token_rate = 100;
+  var tokens_per_wei = 100;
   var minimum_purchase=1;
 
   it('creates a contract', async function() {
     const contract = await TokenCampaign.deployed();
-    await contract.createCampaign("Test 1", cap, wei_rate, token_rate, minimum_purchase);
+    await contract.createCampaign("Test 1", cap, tokens_per_wei, minimum_purchase);
   });
 
   it('checks the number of contracts', async function() {
@@ -26,19 +25,27 @@ contract("TokenCampaign", function(accounts) {
     assert.equal(num_campaigns, 1, "has the correct number");
   });
 
-  /*
+  it('disallows fractional wei', async function () {
+    const contract = await TokenCampaign.deployed();
+    try {
+      await contract.getCurrentWeiRate(tokens_per_wei - 1);
+    } catch (_) {
+      return;
+    }
+    assert.fail('expected the contract to throw on fractional wei');
+  });
+
   it('checks the wei rate', async function() {
     const contract = await TokenCampaign.deployed();
-    const rate = await contract.getWeiRate(1, 100);
-    assert.equal(rate, wei_rate, 'has the correct wei rate');
+    const rate = await contract.getCurrentWeiRate(tokens_per_wei);
+    assert.equal(rate, 1, 'has the correct wei rate');
   });
 
   it('checks the token rate', async function() {
     const contract = await TokenCampaign.deployed();
-    const rate = await contract.getTokenRate(1, 1);
-    assert.equal(rate, token_rate, 'has the correct wei rate');
+    const rate = await contract.getCurrentTokenRate(1);
+    assert.equal(rate, tokens_per_wei, 'has the correct token rate');
   });
-  */
 
   it('gets the current contract balance of 0', async function() {
     const contract = await TokenCampaign.deployed();
@@ -71,7 +78,7 @@ contract("TokenCampaign", function(accounts) {
   it('checks the balance of the sender', async function() {
     const contract = await TokenCampaign.deployed();
     const my_balance = await contract.getBalance(owner);
-    assert.equal(my_balance, tx_amount * token_rate, "has the correct account balance");
+    assert.equal(my_balance, tx_amount * tokens_per_wei, "has the correct account balance");
   });
 
 
