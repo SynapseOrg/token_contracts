@@ -1,0 +1,74 @@
+{
+  "contract_name": "ConvertLib",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "name": "conversionRate",
+          "type": "uint256"
+        }
+      ],
+      "name": "convert",
+      "outputs": [
+        {
+          "name": "convertedAmount",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    }
+  ],
+  "unlinked_binary": "0x60606040523415600e57600080fd5b5b60908061001d6000396000f300606060405263ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166396e4ee3d8114603c575b600080fd5b6048600435602435605a565b60405190815260200160405180910390f35b8181025b929150505600a165627a7a72305820cfab9dde0b493712f8940c642cd28534f80b39f8e2203c3b2f3f3651d7539bff0029",
+  "networks": {
+    "1508366758407": {
+      "events": {},
+      "links": {},
+      "address": "0x597efe2684b85d124a74ba4ff913060f25458dd9",
+      "updated_at": 1508366771502
+    },
+    "1508386787425": {
+      "events": {},
+      "links": {},
+      "address": "0x15e255ae490d0ab02f1c466bbc1692cf2591e1ae",
+      "updated_at": 1508386795236
+    },
+    "1508391554672": {
+      "events": {},
+      "links": {},
+      "address": "0x3612f1c87a62c9f12f4e8b840aa18df182936643",
+      "updated_at": 1508391580622
+    },
+    "1508392440561": {
+      "events": {},
+      "links": {},
+      "address": "0x01be49277ee3f236989658d1c0132c17a913e368",
+      "updated_at": 1508392484730
+    },
+    "1508449657864": {
+      "events": {},
+      "links": {},
+      "address": "0x9df69342f9271310b7dd3a8b36f1ffc56270c163",
+      "updated_at": 1508449667895
+    },
+    "1508455707617": {
+      "events": {},
+      "links": {},
+      "address": "0x675c4395e25e8d1ae18db6263e564e17fbcba58c",
+      "updated_at": 1508455724792
+    },
+    "1508462956641": {
+      "events": {},
+      "links": {},
+      "address": "0xba38e884bca6bd8a3e1feac2b7daad1eeb7f65a8",
+      "updated_at": 1508463599405
+    }
+  },
+  "schema_version": "0.0.5",
+  "updated_at": 1508463599405
+}
