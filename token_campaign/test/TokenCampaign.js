@@ -16,7 +16,7 @@ contract("TokenCampaign", function(accounts) {
 
   it('creates a contract', async function() {
     const contract = await TokenCampaign.deployed();
-    await contract.createCampaign("Test 1", cap, tokens_per_wei, minimum_purchase);
+    await contract.createCampaign(cap, tokens_per_wei, minimum_purchase);
   });
 
   it('checks the number of contracts', async function() {
@@ -138,18 +138,3 @@ contract("TokenCampaign", function(accounts) {
   */
 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

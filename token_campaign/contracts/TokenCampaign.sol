@@ -15,7 +15,6 @@ contract TokenCampaign {
   uint256 totalRaised;
 
   struct Campaign {
-    string name;
     uint256 cap;
     uint256 tokens_per_wei;
     uint256 wei_minimum;
@@ -52,14 +51,13 @@ contract TokenCampaign {
 
 
   // Create a campaign
-  function createCampaign(string _name,
-                          uint256 _cap,
+  function createCampaign(uint256 _cap,
                           uint256 _tokens_per_wei,
                           uint256 _minimum
                           )
                           public
                           onlyOwner {
-    campaigns[numCampaigns] = Campaign(_name, _cap, _tokens_per_wei, _minimum, 0);
+    campaigns[numCampaigns] = Campaign(_cap, _tokens_per_wei, _minimum, 0);
     numCampaigns = numCampaigns + 1;
   }
 
@@ -69,12 +67,11 @@ contract TokenCampaign {
     constant
     returns (
       uint256 campaignID,
-      string name,
       uint256 cap,
       uint256 tokens_per_wei,
       uint256 wei_minimum) {
     var c = campaigns[_campaignID];
-    return (_campaignID, c.name, c.cap, c.tokens_per_wei, c.wei_minimum);
+    return (_campaignID, c.cap, c.tokens_per_wei, c.wei_minimum);
   }
 
   // Returns details for current campaign
@@ -82,12 +79,11 @@ contract TokenCampaign {
     public
     constant
     returns (uint256 campaignID,
-             string name,
              uint256 cap,
 	     uint256 tokens_per_wei,
              uint256 wei_minimum) {
     var c = campaigns[currentCampaignID];
-    return (currentCampaignID, c.name, c.cap, c.tokens_per_wei, c.wei_minimum);
+    return (currentCampaignID, c.cap, c.tokens_per_wei, c.wei_minimum);
   }
 
   // Sets the current campaign via ID
@@ -97,14 +93,12 @@ contract TokenCampaign {
 
   // Update campaign details
   function updateCampaignDetails(uint256 _campaignID,
-                                 string _name,
                                  uint256 _cap,
                                  uint256 _tokens_per_wei,
                                  uint256 _wei_minimum)
                                  public
                                  onlyOwner {
     var c = campaigns[_campaignID];
-    c.name = _name;
     c.cap = _cap;
     c.tokens_per_wei = _tokens_per_wei;
     c.wei_minimum = _wei_minimum;
