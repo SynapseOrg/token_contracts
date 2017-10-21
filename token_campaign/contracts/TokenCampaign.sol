@@ -17,8 +17,7 @@ contract TokenCampaign {
   struct Campaign {
     string name;
     uint256 cap;
-    uint256 wei_value;
-    uint256 token_value;
+    uint256 tokens_per_wei;
     uint256 wei_minimum;
     uint256 totalBalance;
   }
@@ -55,13 +54,12 @@ contract TokenCampaign {
   // Create a campaign
   function createCampaign(string _name,
                           uint256 _cap,
-                          uint256 _wei_value,
-                          uint256 _token_value,
+                          uint256 _tokens_per_wei,
                           uint256 _minimum
                           )
                           public
                           onlyOwner {
-    campaigns[numCampaigns] = Campaign(_name, _cap, _wei_value, _token_value, _minimum, 0);
+    campaigns[numCampaigns] = Campaign(_name, _cap, _tokens_per_wei, _minimum, 0);
     numCampaigns = numCampaigns + 1;
   }
 
@@ -73,11 +71,10 @@ contract TokenCampaign {
       uint256 campaignID,
       string name,
       uint256 cap,
-      uint256 wei_value,
-      uint256 token_value,
+      uint256 tokens_per_wei,
       uint256 wei_minimum) {
     var c = campaigns[_campaignID];
-    return (_campaignID, c.name, c.cap, c.wei_value, c.token_value, c.wei_minimum);
+    return (_campaignID, c.name, c.cap, c.tokens_per_wei, c.wei_minimum);
   }
 
   // Returns details for current campaign
@@ -87,11 +84,10 @@ contract TokenCampaign {
     returns (uint256 campaignID,
              string name,
              uint256 cap,
-             uint256 wei_value,
-             uint256 token_value,
+	     uint256 tokens_per_wei,
              uint256 wei_minimum) {
     var c = campaigns[currentCampaignID];
-    return (currentCampaignID, c.name, c.cap, c.wei_value, c.token_value, c.wei_minimum);
+    return (currentCampaignID, c.name, c.cap, c.tokens_per_wei, c.wei_minimum);
   }
 
   // Sets the current campaign via ID
@@ -103,16 +99,14 @@ contract TokenCampaign {
   function updateCampaignDetails(uint256 _campaignID,
                                  string _name,
                                  uint256 _cap,
-                                 uint256 _wei_value,
-                                 uint256 _token_value,
+                                 uint256 _tokens_per_wei,
                                  uint256 _wei_minimum)
                                  public
                                  onlyOwner {
     var c = campaigns[_campaignID];
     c.name = _name;
     c.cap = _cap;
-    c.wei_value = _wei_value;
-    c.token_value = _token_value;
+    c.tokens_per_wei = _tokens_per_wei;
     c.wei_minimum = _wei_minimum;
   }
 
@@ -166,13 +160,22 @@ contract TokenCampaign {
 
   function getTokenRate(uint256 _campaignID, uint256 query_wei) public constant returns (uint256) {
     var c = campaigns[_campaignID];
-    uint256 query_token = query_wei * (c.token_value/c.wei_value);
+    uint256 query_token = query_wei * c.tokens_per_wei;
     return query_token;
+  }
+
+  function getCurrentWeiRate(uint256 query_token) public constant returns (uint256) {
+    return getWeiRate(currentCampaignID, query_token);
   }
 
   function getWeiRate(uint256 _campaignID, uint256 query_token) public constant returns (uint256) {
     var c = campaigns[_campaignID];
-    uint256 query_wei = query_token * (c.wei_value/c.token_value);
+    uint256 query_wei = query_token / c.tokens_per_wei;
+    // Make sure query_wei gives an integer amount of tokens.
+    if (query_wei * c.tokens_per_wei != query_token) {
+        Event("Wei amount does not buy an integer amount of tokens.", query_wei);
+        revert();
+    }
     return query_wei;
   }
 
